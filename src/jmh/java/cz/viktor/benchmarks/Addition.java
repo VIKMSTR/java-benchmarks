@@ -8,8 +8,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
-@Warmup(iterations = 3, time = 1)
-@Measurement(iterations = 50, time = 1)
+@Warmup(iterations = 10, time = 1)
+@Measurement(iterations = 100, time = 1)
 @BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)
 @Fork(value = 1, jvmArgsAppend = {"--add-modules=jdk.incubator.vector"})
@@ -21,6 +21,7 @@ public class Addition {
     @Setup
     public void setup() {
         TEST_DATA = IntStream.range(0, 10_000_000).toArray();
+        System.out.println("SIMD SHAPE: " + IntVector.SPECIES_PREFERRED);
     }
 
     @Benchmark
