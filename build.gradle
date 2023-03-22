@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    //https://github.com/melix/jmh-gradle-plugin
+    id 'me.champeau.jmh' version '0.7.0'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(20)
+    }
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+jmh {
+    jvmArgsPrepend = ["--add-modules=jdk.incubator.vector", "--enable-preview"]
+}
+//https://github.com/melix/jmh-gradle-plugin/issues/190#issuecomment-1304384016
+jmhRunBytecodeGenerator {
+    getJvmArgs().add("--add-modules=jdk.incubator.vector")
+}
+
+
+compileJava {
+    options.compilerArgs.addAll(['--release', '20'])
+    options.compilerArgs.addAll(['--enable-preview'])
+    options.compilerArgs.addAll(['--add-modules', 'jdk.incubator.vector'])
+}
+
+tasks.jmh {
+    jvmArgs = ["--add-modules=jdk.incubator.vector"]
+}
+
+compileJmhJava{
+    options.compilerArgs.addAll(['--release', '20'])
+    options.compilerArgs.addAll(['--enable-preview'])
+    options.compilerArgs.addAll(['--add-modules', 'jdk.incubator.vector'])
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-core
+    implementation 'org.openjdk.jmh:jmh-core:1.36'
+    // https://mvnrepository.com/artifact/org.openjdk.jmh/jmh-generator-annprocess
+    implementation 'org.openjdk.jmh:jmh-generator-annprocess:1.36'
+    jmhAnnotationProcessor 'org.openjdk.jmh:jmh-generator-annprocess:1.36'
+
+}
+
+test {
+    useJUnitPlatform()
+}
