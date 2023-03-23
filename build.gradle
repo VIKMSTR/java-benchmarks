@@ -18,6 +18,7 @@ repositories {
 }
 jmh {
     jvmArgsPrepend = ["--add-modules=jdk.incubator.vector", "--enable-preview"]
+    resultFormat = 'JSON'
 }
 //https://github.com/melix/jmh-gradle-plugin/issues/190#issuecomment-1304384016
 jmhRunBytecodeGenerator {
